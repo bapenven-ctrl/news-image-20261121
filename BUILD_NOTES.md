@@ -1,0 +1,25 @@
+# Build Notes — news-image-20261121, Tahap 1 (BUILD saja, TANPA submit)
+
+- **Tanggal build:** Sabtu 2026-11-21 (±12:40 WIB). Metode M1 (disetujui Keva, mode otomatis penuh untuk bounty ini; submit oleh run lanjutan hari Minggu).
+- **Renderer:** `main.py` ditulis dari nol di sesi ini (Python 3 + Pillow 10.2, font Noto Serif/Noto Sans sistem). TIDAK ada kode/file dari template yang disalin — template hanya referensi gaya (broadsheet krem, masthead serif, strip angka besar, chip region, 3 hero + peta pin poligon solid, grid kartu 2×5, brief 3 kolom, band DATE CHECK krem berbingkai merah tua). Semua ilustrasi digambar vektor datar prosedural di dalam main.py; poligon peta digambar tangan (stilasi kasar, pin diverifikasi point-in-polygon).
+- **Output:** `entry.png` 1024×1024, **677.562 byte** (≤1 MiB), sha256 `34810f824d8901569d7434895211e89ba37055ced2ed7bf7da462141140a429f`.
+- **Determinisme:** dua run berturut-turut byte-identical (sha256 sama, `cmp` bersih). Render internal: supersample 2× → downscale LANCZOS; tanpa randomness/jam/network.
+- **Verify internal (di dalam main.py, jalan setiap run):** total 34 cerita (3 hero + 10 kartu + 21 brief); chip region menjumlah ke 34; penomoran 1–34 kontinu; 13 pin terverifikasi di darat (point-in-polygon atas poligon peta sendiri); semua headline/ringkasan/brief/DATE CHECK terukur tidak overflow kotaknya. Hasil: **VERIFY OK**.
+- **Isi:** daftar cerita KANDIDAT AWAL (lihat stories.md — wajib story-lock ulang Tahap 2 setelah hari UTC selesai). Jebakan tanggal dipatuhi: Kryvyi Rih diturunkan ke brief dengan framing angka korban terbaru; rudal Riyadh memakai angka Reuters (3) + hitungan koalisi AFP (5 total) teratribusi terpisah; Roundup & plot attaché Denmark dieksklusi ke DATE CHECK meski rank 1 memuatnya.
+- **Kekurangan yang diketahui (untuk Tahap 2 — SELESAI, lihat catatan Tahap 2 di bawah):**
+  1. Daftar cerita belum terkunci — event Sabtu malam UTC belum masuk (BepiColombo, kualifikasi Las Vegas, draf final COP31, hasil Ashes hari itu).
+  2. Brief 33 (Jurf al-Sakhar) & 34 (kapal Bayelsa) beratribusi generik "(Reports)" — outlet wajib dipastikan saat story-lock atau brief diganti cadangan terverifikasi.
+  3. Ilustrasi hero 2 (Riyadh) paling lemah: busur rudal terbaca sebagai garis lurus, skyline nyaris tak terlihat di navy.
+  4. Peta dunia stilasi kasar: gabungan Afrika–Arab menyatu, kepulauan Indonesia menyatu dengan Papua/Australia secara visual; pin 2 & 5 butuh nudge tampilan agar tidak tertutup pin tetangga (sudah diterapkan offset tampilan, posisi geografis tetap diverifikasi).
+  5. Kartu 6 (Rahul): tongkat/stumps terbaca sederhana; kartu 12: gelembung bicara kedua kosong.
+  6. Audit visual 14 dimensi + perbandingan visual vs rank 1–3 live untuk Keva BELUM dilakukan — itu langkah Tahap 2 sebelum submit, sesuai aturan visual-check.
+- **Tidak dilakukan tahap ini (sesuai brief):** tidak ada submit, tidak ada bundle, tidak ada repo.
+
+## Tahap 2 — story lock + re-render (Minggu 2026-11-22, ±01:00 WIB)
+
+- **Story lock** (agen riset terpisah, cap 1,5 jt; laporan `story-lock-2026-11-22.md`): riset ulang penuh setelah hari UTC selesai. **11 item Tahap 1 terbukti peristiwa 19–20 Nov dan DIBUANG/diganti** (Zelensky/NBC, Trump data centre, China–Jepang, Australia–Tiongkok AI, Vance, SpaceX, eksekusi Texas, vonis Palisades, sidang iklim Kanada, AfCRA, Cummins; Jurf al-Sakhar + Bayelsa pindah ke eksklusi).
+- **Perubahan isi:** hero 3 baru BepiColombo (TERKONFIRMASI masuk orbit Merkurius 19:24 CET); hero 1 COP31 = "no deal" (draf ketiga tak keluar Sabtu); hero 2 = angka **3** saja (Jizan Jumat malam; angka 5 DILARANG); kartu baru Ashes (Australia menang 8 wicket/2 hari), Sparta II, Gaza, gelombang drone Ukraina (3+148, 117 dicegat); Rahul diperbarui 136/486-4, Vegas = Antonelli tercepat tapi Verstappen pole, Bitcoin low $55.130/tutup $57.884; Kryvyi Rih diperbarui 2 tewas/60 luka; 7 brief baru (UE–Indonesia, killer robots, protes Eropa, Bahrain, UK–UE, Pannun, Haiti); DATE CHECK diperluas (25+ eksklusi).
+- **Renderer:** 6 ilustrasi baru (bepi, peru kartu, ashes, sparta, gaza, drones); 5 ilustrasi terbuang dihapus (canberra, kyiv, trump, beijing, tehran); busur rudal hero 2 diperbaiki jadi lengkung halus; pin map di-offset ulang (cluster Eropa/Timur Tengah); strip region tanpa AFRICA (0 cerita Afrika terverifikasi Sabtu) — EUROPE 9, AMERICAS 6, ASIA-PACIFIC 9, MIDEAST 6, OCEANIA 2, WORLD 2 = 34.
+- **Output:** `entry.png` 1024×1024, **701.614 byte** (≤1 MiB), sha256 `a71da196481e06fdb55e55a75d6eda49fbdc0434c916dfc2be9f1b6e028c2ab8`. **Determinisme:** dua run byte-identical (`cmp` bersih). **Verify internal: VERIFY OK** (34 cerita, pin di darat, tanpa overflow).
+- **Inspeksi visual (tahap ini):** gambar dibuka dan dibaca — masthead/standfirst/strip angka bersih; hero 2 busur rudal kini terbaca melengkung; peta pin 1–13 terpisah dan terbaca; kartu 10 Bitcoin "LOW $55,130" rapat tapi terbaca; DATE CHECK 3 baris terbaca penuh.
+- **Belum dilakukan:** crosscheck MODE submit (langkah berikut) → submit → score-watch.
