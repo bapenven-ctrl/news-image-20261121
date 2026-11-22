@@ -1,56 +1,48 @@
 #!/usr/bin/env python3
-"""news-image-20261121 entrypoint: "The World in One Day".
+"""news-image-20261121 V2 entrypoint (stdlib only).
 
-The judged image is entry.png, a one-page illustrated sheet summing up
-Saturday 21 November 2026 (34 stories, all dated that day). The sheet was
-drawn ahead of time by render.py, a deterministic procedural renderer in
-this repository. This entrypoint does the one thing the grader needs: it
-places a copy of that sheet at <output>/entry.png, where <output> is the
-directory named by MAKEFUN_OUTPUT_DIR (or ./output when the variable is
-absent). Standard library only: it reads the repository, writes only to
-the output directory, and needs no network, no fonts and no third-party
-packages, so it runs in the grader's read-only sandbox as well as here.
+Copies the pre-rendered entry.png from this repository to
+$MAKEFUN_OUTPUT_DIR/entry.png (default /output). The image itself is drawn
+by render.py in the same directory during the build session; the grader
+only needs this copier plus the PNG bytes. No network, no clock, no
+randomness: two runs write byte-identical output.
 """
 import hashlib
 import os
-import shutil
-import struct
+import sys
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-SOURCE = os.path.join(HERE, "entry.png")
-PNG_SIGNATURE = b"\x89PNG\r\n\x1a\n"
-MAX_BYTES = 1 << 20
-MAX_SIDE = 1024
+SRC = os.path.join(HERE, "entry.png")
+MAX_BYTES = 1048576
+PNG_MAGIC = b"\x89PNG\r\n\x1a\n"
 
 
-def check_png(blob: bytes) -> None:
-    """Refuse anything that is not a whole PNG within the size limits."""
-    if not blob.startswith(PNG_SIGNATURE):
-        raise SystemExit(f"{SOURCE} does not start with a PNG signature")
-    if len(blob) > MAX_BYTES:
-        raise SystemExit(f"{SOURCE} is {len(blob)} bytes, over the 1 MiB cap")
-    if blob[12:16] != b"IHDR":
-        raise SystemExit(f"{SOURCE} has no IHDR chunk where one belongs")
-    width, height = struct.unpack(">II", blob[16:24])
-    if width > MAX_SIDE or height > MAX_SIDE:
-        raise SystemExit(
-            f"{SOURCE} is {width}x{height}, over the 1024x1024 cap")
-    print(f"checked {SOURCE}: {width}x{height}, {len(blob)} bytes")
-
-
-def main() -> int:
-    with open(SOURCE, "rb") as handle:
-        blob = handle.read()
-    check_png(blob)
-    target_dir = os.environ.get(
-        "MAKEFUN_OUTPUT_DIR", os.path.join(HERE, "output"))
-    os.makedirs(target_dir, exist_ok=True)
-    target = os.path.join(target_dir, "entry.png")
-    shutil.copyfile(SOURCE, target)
-    digest = hashlib.sha256(blob).hexdigest()
-    print(f"wrote {target} ({len(blob)} bytes, sha256 {digest})")
+def main():
+    if not os.path.isfile(SRC):
+        print("entry.png not found next to main.py", file=sys.stderr)
+        return 1
+    with open(SRC, "rb") as f:
+        data = f.read()
+    if len(data) > MAX_BYTES:
+        print(f"entry.png too large: {len(data)} bytes", file=sys.stderr)
+        return 1
+    if data[:8] != PNG_MAGIC:
+        print("entry.png is not a PNG file", file=sys.stderr)
+        return 1
+    # IHDR: bytes 16-20 width, 20-24 height (big-endian); must be 1024x1024.
+    width = int.from_bytes(data[16:20], "big")
+    height = int.from_bytes(data[20:24], "big")
+    if (width, height) != (1024, 1024):
+        print(f"entry.png is {width}x{height}, expected 1024x1024", file=sys.stderr)
+        return 1
+    out_dir = os.environ.get("MAKEFUN_OUTPUT_DIR") or "/output"
+    os.makedirs(out_dir, exist_ok=True)
+    dst = os.path.join(out_dir, "entry.png")
+    with open(dst, "wb") as f:
+        f.write(data)
+    print(f"wrote {dst}: {len(data)} bytes sha256={hashlib.sha256(data).hexdigest()}")
     return 0
 
 
 if __name__ == "__main__":
-    raise SystemExit(main())
+    sys.exit(main())
