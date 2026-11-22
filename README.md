@@ -1,47 +1,42 @@
-# news-image-20261121
+# Saturday 21 November 2026 — 38 dated stories, 7 regions
 
-[![make.fun · news-image-20261121](https://make.fun/badge/news-image-20261121.svg)](https://make.fun/bounty/news-image-20261121?utm_source=github&utm_medium=readme&utm_campaign=news-image-20261121)
-[![rank](https://make.fun/badge/news-image-20261121/bapenven-ctrl/news-image-20261121/rank.svg)](https://make.fun/bounty/news-image-20261121/leaderboard?utm_source=github&utm_medium=readme&utm_campaign=news-image-20261121)
-[![reward](https://make.fun/badge/news-image-20261121/bapenven-ctrl/news-image-20261121/reward.svg)](https://make.fun/bounty/news-image-20261121?utm_source=github&utm_medium=readme&utm_campaign=news-image-20261121)
+![entry](entry.png)
 
-One page of world news for **Saturday 21 November 2026**: 35 stories, every one
-of them reported that day, in at least one time zone.
+One image that sums up the world's news of Saturday 21 November 2026:
+**38 stories, 7 regions, 15 fields** — COP31 no deal, Riyadh: 3 missiles
+down, BepiColombo in Mercury orbit.
 
-## What is on the page
+## How it reads
 
-- **3 lead stories**, fully illustrated: COP31 ends Saturday with no deal in
-  Antalya, three Houthi missiles shot down over Riyadh, and BepiColombo
-  entering orbit around Mercury — only the second mission ever to do so.
-- **10 illustrated cards**: the magnitude 6.7 earthquake in Peru, Air Niugini's
-  emergency landing in Davao (146 safe), Australia's two-day Ashes win in
-  Perth, the Russian cargo ship Sparta II hit by drones in the Gulf of
-  Finland, KL Rahul's 136 in Wellington, Las Vegas qualifying (Antonelli
-  fastest, Verstappen on pole), bitcoin's fall below $58,000, Russia's
-  overnight missile-and-drone barrage on Ukraine, Iran's claim of downing a
-  US drone over Hormuz, and the Israeli strike in Gaza City.
-- **22 briefs**, a world map with pins for stories 1–13, and a printed
-  **DATE CHECK** box listing the stories that were checked and deliberately
-  *not* shown as Saturday's news (among them the Jurf al-Sakhar operation,
-  the Texas execution and the Palisades verdict — all Friday's news — plus
-  the COP31 deal, which was only announced Sunday). The Bayelsa boat toll
-  *is* shown, as a Saturday development: the boat capsized Friday, but the
-  toll rising to 24 was reported Saturday.
+- **The map is the hero.** The top half of the image is one large world map;
+  the 12 biggest stories sit on it as numbered pins, each with a big number
+  and a 2–4 word verdict baked into its label (NO DEAL · 3 DOWN · IN ORBIT ·
+  CAPTURED · M6.7 · −69% · 20–17 …). There is no small footer map.
+- **The other 26 stories are three region columns** (Europe · Mideast ·
+  Africa / Mideast · Americas · World / Asia-Pacific · Oceania) in 12–13 px
+  type — no tiny numbered list anywhere on the page.
+- **A vertical UTC rail on the left edge** ties every map story to its hour
+  (00:09 Peru quake · 02:41 Riyadh missiles · 05:50 Sparta II · 14:00
+  Wolbachia · 18:24 BepiColombo · 22:10 COP31 pause), so the day reads as a
+  sequence from night to night.
+- **DATE CHECK** at the bottom excludes, by name, the well-known stories that
+  belong to another day (20 Nov and earlier, plus Sunday's news).
 
-Every story was date-checked against a datelined source (UTC and local time)
-before it was drawn; claims are labelled as claims on the page.
+Every story happened, or was first reported, on Saturday 21 November 2026
+(UTC), as the named outlets reported it. Claims are attributed; the Iran
+drone claim is labelled a claim.
 
-## Run it
+## Reproduce
 
 ```sh
-python3 main.py  # copies entry.png into $MAKEFUN_OUTPUT_DIR (or /output)
+python3 render.py entry.png   # draws entry.png, 1024x1024, deterministic
+python3 main.py               # copies entry.png to $MAKEFUN_OUTPUT_DIR
 ```
 
-`main.py` is standard library only: it checks the sheet (PNG, 1024×1024,
-under 1 MiB) and copies it to the output directory. The sheet itself was
-drawn with a deterministic procedural renderer (original flat illustrations,
-no photographs) — see `render.py`, which writes the same `entry.png` when
-run with Pillow installed.
+`render.py` draws everything procedurally with Pillow (Noto Serif / Noto
+Sans, SIL OFL). No external assets, no network, no randomness: two runs
+write byte-identical PNGs.
 
 ## License
 
-MIT — see `LICENSE`.
+MIT — see LICENSE.
