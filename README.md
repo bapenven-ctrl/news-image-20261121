@@ -31,12 +31,14 @@ before it was drawn; claims are labelled CLAIM on the page.
 ## Run it
 
 ```sh
-python3 main.py  # writes entry.png (1024x1024, deterministic)
+python3 main.py  # copies entry.png into $MAKEFUN_OUTPUT_DIR (or ./output)
 ```
 
-The sheet itself was drawn with a deterministic procedural renderer
-(original flat illustrations, no photographs), in this repository's build
-session.
+`main.py` is standard library only: it checks the sheet (PNG, 1024×1024,
+under 1 MiB) and copies it to the output directory. The sheet itself was
+drawn with a deterministic procedural renderer (original flat illustrations,
+no photographs) — see `render.py`, which takes the same `entry.png` as its
+output when run with Pillow installed.
 
 ## License
 
